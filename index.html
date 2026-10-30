@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zapia IA | Agente Gratis & Red Sapien</title>
     <meta name="theme-color" content="#030305">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="color-scheme" content="dark">
     <meta name="description" content="Conéctelo con WhatsApp y sus herramientas de forma sencilla y guiada.">
     <meta name="application-name" content="IAOPEN | Red Sapien">
@@ -443,6 +444,27 @@
   @media(max-width:600px){.video-card{width:clamp(203px,55vw,277px)}.store-badge{width:128px;min-width:128px}.fases-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.fase-card h3{font-size:.77rem!important}}
   @media(max-width:360px){.video-card{width:clamp(203px,55vw,277px)}.store-badge{width:121px;min-width:121px}.hero-downloads{gap:6px}.fase-card h3{font-size:.73rem!important}}
 </style>
+<style id="iaopen-refinamiento-20261029">
+ html{color-scheme:dark;background:#030305} body{background:#030305}
+ .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+ .typewriter-text{font-size:clamp(.72rem,2.1vw,.83rem);line-height:1.25;max-width:270px}
+ main{padding-top:clamp(82px,9vw,100px)}
+ .hero-text{position:relative;padding:clamp(18px,4vw,28px) 14px;margin:0 auto 24px;max-width:760px;border-radius:22px;background:radial-gradient(ellipse at 50% 0%,rgba(16,185,129,.12),transparent 68%),linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.006));border:1px solid rgba(255,255,255,.055)}
+ .hero-text h1{letter-spacing:-.025em;margin-bottom:8px;text-wrap:balance}.hero-text p{line-height:1.5}.hero-downloads{margin-top:18px}
+ .carousel-container{gap:14px;padding-bottom:18px}.scroll-more-cue{margin:6px auto 22px}
+ .section-box{padding:clamp(19px,3vw,25px);margin:24px 0 30px}.section-box h2{font-size:clamp(1.25rem,4vw,1.6rem)!important;line-height:1.25;margin-bottom:8px!important}
+ .ecosystem-section{margin:30px 0}.ecosystem-heading{padding:15px 12px;margin-bottom:14px;border-radius:15px;background:radial-gradient(ellipse at center,rgba(229,9,20,.075),transparent 75%)}
+ .ecosystem-heading h2{letter-spacing:-.02em}.fases-grid{gap:10px;margin:14px 0}.author-box{margin:26px 0;padding:22px}
+ .modal-fullscreen{background:radial-gradient(ellipse at 50% 38%,rgba(16,185,129,.07),transparent 50%),rgba(2,2,4,.98)}
+ .modal-video-frame{border-color:rgba(255,255,255,.16);box-shadow:0 18px 60px rgba(0,0,0,.6),0 0 0 1px rgba(16,185,129,.055);width:min(92vw,48svh,calc((100svh - 145px)*9/16));max-height:calc(100svh - 145px)}
+ .modal-clean-header .pip-button,.modal-close{width:46px;height:46px;cursor:pointer}.modal-close:focus-visible,.pip-button:focus-visible{outline:2px solid #10b981;outline-offset:3px}
+ #vModalDesc{font-size:.93rem!important;line-height:1.45!important;margin-top:12px!important;max-width:min(88vw,430px)!important;color:#d1d5db!important;text-wrap:balance}
+ .install-overlay{bottom:66px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+ .video-status:not(:empty){position:static;width:auto;height:auto;clip:auto;white-space:normal;max-width:90%;font-size:.8rem;text-align:center;color:#e5e7eb;margin:7px auto}
+ @media(max-width:600px){main{padding-top:80px}.hero-text{padding:19px 12px;margin-bottom:19px}.section-box{margin:22px 0 26px}.modal-video-frame{width:min(92vw,48svh,calc((100svh - 145px)*9/16));max-height:calc(100svh - 145px)}}
+ @media(max-width:360px){.typewriter-text{font-size:.7rem}.hero-text{padding-inline:10px}.fase-card{padding:10px 6px}}
+ @media(prefers-reduced-motion:reduce){.typewriter-text{animation:none}}
+</style>
 </head>
 <body class="loading">
 
@@ -640,7 +662,7 @@
                 <div id="autoplayTimer" class="autoplay-timer" role="status" aria-live="polite">Siguiente video en 6 s</div>
             </div>
             <p id="videoStatus" class="video-status" role="status" aria-live="polite"></p>
-            <h3 id="vModalTitle" style="font-size: 1rem; margin-top: 8px; text-align:center;"></h3>
+            <h3 id="vModalTitle" class="sr-only"></h3>
             <p id="vModalDesc" style="color: var(--text-muted); font-size: 0.75rem; text-align:center; margin-top: 2px; max-width: 90%;"></p>
         </div>
 
@@ -660,16 +682,15 @@
     <!-- SCRIPTS -->
     <script>
         const videoData = [
-            { title: "Descargar y configurar Zapia", desc: "Descargando y configurando Zapia.", src: "Videos/AIopen-Videos/01-Instalar-Zapia.mp4", poster: "Videos/AIopen-Videos/01-Instalar-Zapia.jpg" },
-            { title: "02. Conectar WhatsApp", desc: "Conecte WhatsApp a su espacio de trabajo.", src: "Videos/AIopen-Videos/02-Conectar-WhatsApp.mp4", poster: "Videos/AIopen-Videos/02-Conectar-WhatsApp.jpg" },
-            { title: "03. Conectar Gmail", desc: "Conecte Gmail para trabajar desde Zapia.", src: "Videos/AIopen-Videos/03-Conectar-Gmail.mp4", poster: "Videos/AIopen-Videos/03-Conectar-Gmail.jpg" },
-            { title: "04. Conectar Calendar", desc: "Conecte Calendar y organice sus actividades.", src: "Videos/AIopen-Videos/04-Conectar-Calendar.mp4", poster: "Videos/AIopen-Videos/04-Conectar-Calendar.jpg" },
-            { title: "05. Conectar Drive", desc: "Conecte Google Drive a su espacio de trabajo.", src: "Videos/AIopen-Videos/05-Conectar-Drive.mp4", poster: "Videos/AIopen-Videos/05-Conectar-Drive.jpg" }
+            { title: "Descargar y configurar Zapia", desc: "Aprenda a descargar Zapia y completar su registro inicial.", src: "Videos/AIopen-Videos/01-Instalar-Zapia.mp4", poster: "Videos/AIopen-Videos/01-Instalar-Zapia.jpg" },
+            { title: "02. Conectar WhatsApp", desc: "Aprenda a conectar WhatsApp con Zapia paso a paso.", src: "Videos/AIopen-Videos/02-Conectar-WhatsApp.mp4", poster: "Videos/AIopen-Videos/02-Conectar-WhatsApp.jpg" },
+            { title: "03. Conectar Gmail", desc: "Aprenda a vincular su cuenta de Gmail con Zapia.", src: "Videos/AIopen-Videos/03-Conectar-Gmail.mp4", poster: "Videos/AIopen-Videos/03-Conectar-Gmail.jpg" },
+            { title: "04. Conectar Calendar", desc: "Aprenda a conectar Google Calendar con su asistente Zapia.", src: "Videos/AIopen-Videos/04-Conectar-Calendar.mp4", poster: "Videos/AIopen-Videos/04-Conectar-Calendar.jpg" },
+            { title: "05. Conectar Drive", desc: "Aprenda a conectar Google Drive con su asistente Zapia.", src: "Videos/AIopen-Videos/05-Conectar-Drive.mp4", poster: "Videos/AIopen-Videos/05-Conectar-Drive.jpg" }
         ];
 
         let currentVideoIdx = 0;
         let timerInterval;
-        let installOverlayTimer;
 
         function populateScheduleTimes() {
             const select = document.getElementById('schedTime');
@@ -763,7 +784,6 @@
             video.removeAttribute('src');
             video.load();
             clearInterval(timerInterval);
-            clearTimeout(installOverlayTimer);
             document.getElementById('installOverlay').hidden = true;
             document.getElementById('videoModal').classList.remove('active');
             document.body.style.overflow = '';
@@ -834,6 +854,15 @@
         }
 
         const mainVideoEl = document.getElementById('mainVideo');
+        function syncInstallOverlay() {
+            const inModal = document.getElementById('videoModal').classList.contains('active');
+            const t = mainVideoEl.currentTime;
+            document.getElementById('installOverlay').hidden = !(currentVideoIdx === 0 && inModal && t >= 4 && t < 10);
+        }
+        mainVideoEl.addEventListener('timeupdate', syncInstallOverlay);
+        mainVideoEl.addEventListener('seeked', syncInstallOverlay);
+        mainVideoEl.addEventListener('loadedmetadata', syncInstallOverlay);
+        mainVideoEl.addEventListener('emptied', () => { document.getElementById('installOverlay').hidden = true; });
         mainVideoEl.addEventListener('leavepictureinpicture', () => {
             const modal = document.getElementById('videoModal');
             if (!modal.classList.contains('active') && !document.getElementById('miniPlayer').classList.contains('is-active')) {
@@ -860,10 +889,7 @@
             video.load();
             document.getElementById('vModalTitle').textContent = data.title;
             document.getElementById('vModalDesc').textContent = data.desc;
-            const installOverlay = document.getElementById('installOverlay');
-            clearTimeout(installOverlayTimer);
-            installOverlay.hidden = idx !== 0;
-            if (idx === 0) installOverlayTimer = setTimeout(() => { installOverlay.hidden = true; }, 5000);
+            document.getElementById('installOverlay').hidden = true;
             syncPipButton();
             video.src = data.src;
             video.load();
