@@ -926,11 +926,9 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
             if (window.scrollY > 60) {
                 banner.classList.add('show');
                 header.classList.add('shifted');
-                document.getElementById('lang-selector').tabIndex=-1;
             } else {
                 banner.classList.remove('show');
                 header.classList.remove('shifted');
-                document.getElementById('lang-selector').tabIndex=0;
             }
         });
 
@@ -954,7 +952,7 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
         });
         mobileMenuElement.addEventListener('keydown', event => {
             if (event.key === 'Tab') {
-                const items = [...mobileMenuElement.querySelectorAll('button:not([disabled]),a[href]')].filter(el => !el.closest('[inert]'));
+                const items = [...mobileMenuElement.querySelectorAll('button:not([disabled]),select:not([disabled]),a[href]')].filter(el => !el.closest('[inert]'));
                 if (!items.length) return;
                 const first=items[0],last=items[items.length-1];
                 if (event.shiftKey && document.activeElement===first) {event.preventDefault();last.focus();}
@@ -1100,11 +1098,14 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
             const nativePip = document.pictureInPictureElement === mainVideoEl || mainVideoEl.webkitPresentationMode === 'picture-in-picture';
             if (document.hidden && nativePip && !mainVideoEl.paused) return;
         });
-        if ('mediaSession' in navigator && 'MediaMetadata' in window) {
-            navigator.mediaSession.setActionHandler('play', () => mainVideoEl.play());
-            navigator.mediaSession.setActionHandler('pause', () => mainVideoEl.pause());
-            navigator.mediaSession.setActionHandler('seekbackward', () => { mainVideoEl.currentTime=Math.max(0,mainVideoEl.currentTime-10); });
-            navigator.mediaSession.setActionHandler('seekforward', () => { mainVideoEl.currentTime=Math.min(mainVideoEl.duration||Infinity,mainVideoEl.currentTime+10); });
+        if ('mediaSession' in navigator) {
+            const mediaActions = {
+                play: () => mainVideoEl.play(),
+                pause: () => mainVideoEl.pause(),
+                seekbackward: () => { mainVideoEl.currentTime=Math.max(0,mainVideoEl.currentTime-10); },
+                seekforward: () => { mainVideoEl.currentTime=Math.min(mainVideoEl.duration||Infinity,mainVideoEl.currentTime+10); }
+            };
+            Object.entries(mediaActions).forEach(([action,handler]) => { try { navigator.mediaSession.setActionHandler(action,handler); } catch (error) {} });
         }
 
         mainVideoEl.addEventListener('leavepictureinpicture', () => {
