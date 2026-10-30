@@ -476,6 +476,14 @@
  @media(max-width:360px){.scroll-more-cue{margin-bottom:18px}.ecosystem-price,.section-box,.author-box{max-width:100%;overflow-wrap:anywhere}}
  @media(prefers-reduced-motion:reduce){#preloader::after,.scroll-more-cue svg{animation:none!important}.section-box.iaopen-reveal,.ecosystem-heading.iaopen-reveal,.fase-card.iaopen-reveal,.ecosystem-price.iaopen-reveal,.author-box.iaopen-reveal{animation:none!important}}
 </style>
+<style id="iaopen-ux-propuesta">
+.carousel-container{scrollbar-width:thin;scrollbar-color:rgba(16,185,129,.55) rgba(255,255,255,.07);overscroll-behavior-x:contain}
+.carousel-container::-webkit-scrollbar{display:block;height:5px}.carousel-container::-webkit-scrollbar-track{background:rgba(255,255,255,.07);border-radius:4px}.carousel-container::-webkit-scrollbar-thumb{background:rgba(16,185,129,.55);border-radius:4px}
+.carousel-container:focus-visible{outline:2px solid #10b981;outline-offset:4px}
+.video-card[role=button]:focus-visible,.store-badge:focus-visible,.scroll-more-cue:focus-visible{outline:2px solid #10b981;outline-offset:3px}
+@media(hover:hover){.video-card[role=button]:hover .play-btn-center{transform:translate(-50%,-50%) scale(1.06)}}
+@media(prefers-reduced-motion:reduce){.video-card[role=button]:hover .play-btn-center{transform:translate(-50%,-50%)}}
+</style>
 </head>
 <body class="loading">
 
@@ -525,7 +533,7 @@
             </div>
         </section>
 
-        <div class="carousel-container">
+        <div class="carousel-container" role="region" aria-label="Tutoriales de Zapia" tabindex="0">
             <div class="video-card" role="button" tabindex="0" onclick="openVideoModal(0)" aria-label="Reproducir paso 1: Instalar Zapia">
                 <img class="card-poster" src="Videos/AIopen-Videos/01-Instalar-Zapia.jpg" alt="Portada del paso 1: Instalar Zapia" loading="lazy" onerror="this.hidden=true">
                 <div class="time-badge">02:48</div>
@@ -657,7 +665,7 @@
     </main>
 
     <!-- MODAL -->
-    <div class="modal-fullscreen" id="videoModal">
+    <div class="modal-fullscreen" id="videoModal" role="dialog" aria-modal="true" aria-labelledby="vModalTitle" aria-describedby="vModalDesc" aria-hidden="true">
         <div class="modal-clean-header">
             <button id="pipButton" class="pip-button" type="button" onclick="togglePictureInPicture()" aria-label="Minimizar video">▣</button>
             <button class="modal-close" onclick="closeVideoModal()" aria-label="Cerrar video">✕</button>
@@ -702,6 +710,7 @@
 
         let currentVideoIdx = 0;
         let timerInterval;
+        let lastVideoTrigger = null;
 
         function populateScheduleTimes() {
             const select = document.getElementById('schedTime');
@@ -773,17 +782,21 @@
         function openVideoModal(idx) {
             if (idx < 0 || idx >= videoData.length) return;
             if (document.getElementById('miniPlayer').classList.contains('is-active')) restoreMiniPlayer();
+            lastVideoTrigger = document.activeElement;
             currentVideoIdx = idx;
+            document.getElementById('videoModal').setAttribute('aria-hidden', 'false');
             document.getElementById('videoModal').classList.add('active');
             document.body.style.overflow = 'hidden';
             loadVideo(currentVideoIdx);
+            document.querySelector('#videoModal .modal-close').focus({preventScroll: true});
         }
 
         function closeVideoModal() {
             const video = document.getElementById('mainVideo');
             const inPip = document.pictureInPictureElement === video || video.webkitPresentationMode === 'picture-in-picture';
             if (inPip) {
-                document.getElementById('videoModal').classList.remove('active');
+                document.getElementById('videoModal').setAttribute('aria-hidden', 'true');
+            document.getElementById('videoModal').classList.remove('active');
                 document.body.style.overflow = '';
                 return;
             }
@@ -796,8 +809,10 @@
             video.load();
             clearInterval(timerInterval);
             document.getElementById('installOverlay').hidden = true;
+            document.getElementById('videoModal').setAttribute('aria-hidden', 'true');
             document.getElementById('videoModal').classList.remove('active');
             document.body.style.overflow = '';
+            if (lastVideoTrigger && lastVideoTrigger.isConnected) lastVideoTrigger.focus({preventScroll: true});
         }
 
         function syncPipButton() {
@@ -833,7 +848,8 @@
                 mount.appendChild(video);
                 mini.hidden = false;
                 mini.classList.add('is-active');
-                document.getElementById('videoModal').classList.remove('active');
+                document.getElementById('videoModal').setAttribute('aria-hidden', 'true');
+            document.getElementById('videoModal').classList.remove('active');
                 document.body.style.overflow = '';
                 document.getElementById('pipButton').hidden = true;
             } catch (error) {
@@ -847,6 +863,7 @@
             frame.insertBefore(video, frame.firstChild);
             document.getElementById('miniPlayer').classList.remove('is-active');
             document.getElementById('miniPlayer').hidden = true;
+            document.getElementById('videoModal').setAttribute('aria-hidden', 'false');
             document.getElementById('videoModal').classList.add('active');
             document.body.style.overflow = 'hidden';
             document.getElementById('pipButton').hidden = false;
@@ -910,7 +927,10 @@
             if (playAttempt && typeof playAttempt.catch === 'function') playAttempt.catch(() => { status.textContent = 'Toque reproducir para iniciar el video con sonido.'; });
             video.onerror = () => { status.textContent = 'No se pudo cargar este video. Revise la conexión e inténtelo de nuevo.'; };
             video.onplaying = () => { status.textContent = ''; };
-            video.onplay = () => { document.getElementById('autoplayTimer').classList.remove('is-visible'); };
+            video.onplay = () => {
+                clearInterval(timerInterval);
+                document.getElementById('autoplayTimer').classList.remove('is-visible');
+            };
 
             video.onended = () => {
                 if (currentVideoIdx >= videoData.length - 1) return;
@@ -945,8 +965,19 @@
         document.addEventListener('keydown', (event) => {
             const card = event.target.closest && event.target.closest('.video-card[role="button"]');
             if (card && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); card.click(); return; }
-            if (event.key === 'Escape' && document.getElementById('videoModal').classList.contains('active')) closeVideoModal();
-            if (!document.getElementById('videoModal').classList.contains('active')) return;
+            const modal = document.getElementById('videoModal');
+            if (!modal.classList.contains('active')) return;
+            if (event.key === 'Escape') { closeVideoModal(); return; }
+            if (event.key === 'Tab') {
+                const controls = Array.from(modal.querySelectorAll('button:not([hidden]):not([disabled]), a[href]:not([hidden]), video[controls]'))
+                    .filter(element => element.getClientRects().length && !element.closest('[hidden]'));
+                if (!controls.length) return;
+                const first = controls[0], last = controls[controls.length - 1];
+                if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+                else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+            }
+            // Keep arrow keys available to native video controls and focused links.
+            if (event.target.closest && event.target.closest('video,button,a,input,select,textarea')) return;
             if (event.key === 'ArrowLeft') prevVideo();
             if (event.key === 'ArrowRight') nextVideo();
         });
