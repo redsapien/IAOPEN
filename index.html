@@ -484,6 +484,25 @@
 @media(hover:hover){.video-card[role=button]:hover .play-btn-center{transform:translate(-50%,-50%) scale(1.06)}}
 @media(prefers-reduced-motion:reduce){.video-card[role=button]:hover .play-btn-center{transform:translate(-50%,-50%)}}
 </style>
+<style id="iaopen-footer-redsapien">
+.hero-text{background:radial-gradient(ellipse at 18% 0%,rgba(229,9,20,.105),transparent 60%),radial-gradient(ellipse at 80% 0%,rgba(16,185,129,.09),transparent 62%),linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.006));border-color:rgba(229,9,20,.13)}
+.video-card[role="button"]{border-color:rgba(229,9,20,.14)}
+@media(hover:hover){.video-card[role="button"]:hover{border-color:rgba(16,185,129,.75)}}
+.iaopen-footer{max-width:690px;margin:clamp(30px,5vw,48px) auto 30px;padding:0 4px 8px}
+.iaopen-terminal{overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:radial-gradient(ellipse at 0% 0%,rgba(229,9,20,.10),transparent 60%),rgba(13,13,18,.9);box-shadow:0 10px 35px rgba(0,0,0,.18)}
+.iaopen-terminal-bar{display:flex;gap:6px;align-items:center;padding:12px 16px 10px;border-bottom:1px solid rgba(255,255,255,.055)}
+.iaopen-terminal-bar span{display:block;width:7px;height:7px;border-radius:50%;background:#e50914;opacity:.85}.iaopen-terminal-bar span:nth-child(2){background:#a0a0a6;opacity:.45}.iaopen-terminal-bar span:nth-child(3){background:#10b981;opacity:.85}
+.iaopen-terminal-line{display:flex;justify-content:center;align-items:flex-start;gap:9px;padding:21px 14px 23px;color:#f3f4f6;font-family:var(--font-mono);font-size:clamp(.8rem,2.5vw,1rem);font-weight:700;line-height:1.6;text-align:center;overflow-wrap:anywhere}
+.iaopen-terminal-prompt{color:#10b981;flex:none}.iaopen-terminal-message{display:inline-block;max-width:100%;animation:iaopen-terminal-type 2.8s steps(40,end) .35s both}
+@keyframes iaopen-terminal-type{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.iaopen-terminal-cursor{display:inline-block;width:2px;height:1em;margin-left:4px;vertical-align:-.14em;background:#e50914;animation:iaopen-terminal-blink 1s steps(1,end) infinite}
+@keyframes iaopen-terminal-blink{50%{opacity:0}}
+.iaopen-thanks{position:relative;display:grid;grid-template-columns:1fr;gap:17px;max-width:470px;margin:24px auto 0;text-align:center;color:#d1d5db;font-size:.85rem}
+.iaopen-thanks-top{font-weight:700;color:#fff}.iaopen-thanks-base{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;color:#aeb6bb;font-size:.8rem;line-height:1.35}
+.iaopen-thanks-base span{overflow-wrap:anywhere}.iaopen-thanks-base span:first-child{color:#a4dbc9}.iaopen-thanks-base span:last-child{color:#e6b6b9}
+@media(max-width:360px){.iaopen-terminal-line{font-size:.78rem;padding-inline:10px}.iaopen-footer{margin-top:28px}.iaopen-thanks{gap:14px}}
+@media(prefers-reduced-motion:reduce){.iaopen-terminal-cursor,.iaopen-terminal-message{animation:none}}
+</style>
 </head>
 <body class="loading">
 
@@ -662,6 +681,17 @@
             <h3 style="font-size: 1.05rem; font-weight: 800;">Soy Cristian</h3>
             <p class="author-bio">Desarrollo ecosistemas digitales de ventas conectados con agentes de IA. Me apasiona acercar tecnología de nivel mundial a más negocios.</p>
         </section>
+
+        <footer class="iaopen-footer" aria-label="Agradecimientos">
+            <div class="iaopen-terminal">
+                <div class="iaopen-terminal-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+                <p class="iaopen-terminal-line"><span class="iaopen-terminal-prompt" aria-hidden="true">&gt;_</span><span class="iaopen-terminal-message">Desde Manizales, Colombia para el mundo<span class="iaopen-terminal-cursor" aria-hidden="true"></span></span></p>
+            </div>
+            <div class="iaopen-thanks">
+                <p class="iaopen-thanks-top">Primero, gracias a Dios</p>
+                <div class="iaopen-thanks-base"><span>Equipo Zapia.com</span><span>Open Source</span></div>
+            </div>
+        </footer>
     </main>
 
     <!-- MODAL -->
