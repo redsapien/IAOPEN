@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zapia IA | Agente Gratis & Red Sapien</title>
+    <meta name="theme-color" content="#030305">
+    <meta name="color-scheme" content="dark">
+    <meta name="description" content="Guía breve para configurar Zapia y conectar sus herramientas. Descargas oficiales, tutoriales y ecosistema digital de Red Sapien.">
+    <meta name="application-name" content="IAOPEN | Red Sapien">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTYiIGZpbGw9IiMwMzAzMDUiLz48cGF0aCBkPSJNMTQgNDIgMzEuNSAxMSA1MCA0MkgzOGwtNi41LTExTDI1IDQyeiIgZmlsbD0iIzEwYjk4MSIvPjxjaXJjbGUgY3g9IjQ2IiBjeT0iNDYiIHI9IjciIGZpbGw9IiNFNTA5MTQiLz48cGF0aCBkPSJNMjcgNDZoMTAiIHN0cm9rZT0iI2YzZjRmNiIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTYiIGZpbGw9IiMwMzAzMDUiLz48cGF0aCBkPSJNMTQgNDIgMzEuNSAxMSA1MCA0MkgzOGwtNi41LTExTDI1IDQyeiIgZmlsbD0iIzEwYjk4MSIvPjxjaXJjbGUgY3g9IjQ2IiBjeT0iNDYiIHI9IjciIGZpbGw9IiNFNTA5MTQiLz48cGF0aCBkPSJNMjcgNDZoMTAiIHN0cm9rZT0iI2YzZjRmNiIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=">
+
+    <style>
+        :root {
+            --bg-dark: #030305;
+            --bg-card: rgba(15, 15, 22, 0.85);
+            --red-primary: #E50914;
+            --red-glow: rgba(229, 9, 20, 0.4);
+            --zapia-green: #10b981;
+            --zapia-glow: rgba(16, 185, 129, 0.4);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --font-main: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-dark); color: var(--text-main); font-family: var(--font-main); overflow-x: hidden; min-height: 100vh; }
+        body.loading { overflow: hidden; }
+
+        /* PRELOADER NEÓN */
+        #preloader {
+            position: fixed; inset: 0; background: #020203; z-index: 99999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.4s ease;
+        }
+        .preloader-glow {
+            position: absolute; width: 180px; height: 180px;
+            background: radial-gradient(circle, var(--red-glow) 0%, rgba(16,185,129,0.2) 50%, rgba(0,0,0,0) 70%);
+            border-radius: 50%; filter: blur(25px); animation: pulseGlow 1.5s infinite ease-in-out;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.12); opacity: 1; }
+        }
+        .logo-svg { width: 60px; height: 60px; color: var(--red-primary); position: relative; z-index: 2; filter: drop-shadow(0 0 12px var(--red-glow)); }
+
+        /* BANNER SCROLL */
+        #scroll-banner {
+            position: fixed; top: -50px; left: 0; right: 0; height: 36px;
+            background: linear-gradient(90deg, var(--red-primary), #800);
+            color: #fff; display: flex; align-items: center; justify-content: center; gap: 6px;
+            font-size: 0.75rem; font-weight: 700; z-index: 1001; transition: top 0.3s ease; text-decoration: none;
+        }
+        #scroll-banner.show { top: 0; }
+        .banner-btn-link { background: #fff; color: var(--red-primary); padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; text-transform: uppercase; }
+
+        /* HEADER & STORE ICONS */
+        header {
+            position: fixed; top: 0; left: 0; right: 0; height: 65px;
+            background: rgba(3, 3, 5, 0.94); backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border-color); display: flex;
+            justify-content: space-between; align-items: center; padding: 0 14px; z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        header.shifted { transform: translateY(36px); }
+
+        .nav-brand-area { display: flex; align-items: center; gap: 10px; max-width: 82%; }
+        .store-icons-stack { display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; }
+        .store-icons-stack svg { width: 18px; height: 18px; fill: var(--zapia-green); }
+        
+        .typewriter-text {
+            font-size: 0.78rem; font-weight: 600; white-space: nowrap; overflow: hidden;
+            border-right: 2px solid var(--zapia-green); animation: blink 0.75s step-end infinite; color: var(--text-main);
+            line-height: 1.2;
+        }
+        @keyframes blink { 50% { border-color: transparent; } }
+
+        .hamburger { background: none; border: none; color: #fff; font-size: 1.4rem; cursor: pointer; }
+
+        /* MENU MOBILE */
+        .mobile-menu {
+            position: fixed; inset: 0; background: rgba(2, 2, 4, 0.98); backdrop-filter: blur(20px);
+            z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            gap: 16px; opacity: 0; pointer-events: none; transition: 0.3s ease; padding: 20px; text-align: center;
+        }
+        .mobile-menu.active { opacity: 1; pointer-events: auto; }
+        .mobile-menu a {
+            color: #fff; font-size: 1.05rem; font-weight: 700; padding: 12px 20px; border-radius: 10px;
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); width: 100%; max-width: 300px; text-decoration: none;
+        }
+
+        /* MAIN CONTAINER */
+        main { padding-top: 80px; max-width: 960px; margin: 0 auto; padding-left: 14px; padding-right: 14px; }
+
+        /* SECCIÓN 1: HERO & CARRUSEL 9:16 */
+        .hero-text { text-align: center; margin-bottom: 20px; }
+        .hero-text h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; }
+        .hero-text p { color: var(--text-muted); font-size: 0.82rem; max-width: 520px; margin: 0 auto; line-height: 1.4; }
+
+        .carousel-container {
+            display: flex; gap: 12px; overflow-x: auto; padding-bottom: 16px;
+            scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+        }
+        .carousel-container::-webkit-scrollbar { display: none; }
+
+        .video-card {
+            width: 185px; height: 330px; background: var(--bg-card);
+            border: 1px solid var(--border-color); border-radius: 14px; flex-shrink: 0;
+            scroll-snap-align: start; position: relative; overflow: hidden; cursor: pointer;
+            transition: 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; padding: 12px;
+        }
+        .video-card:hover { border-color: var(--zapia-green); box-shadow: 0 0 15px var(--zapia-glow); }
+        .video-card .card-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(3,3,5,0.18) 44%, rgba(3,3,5,0.96) 100%); z-index: 1; }
+        .card-poster { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+        .card-label { position:relative; z-index:2; }
+        .card-label span { color:var(--zapia-green); font-size:.65rem; font-weight:700; }
+        .card-label h3 { font-size:.85rem; margin-top:3px; }
+        .play-btn-center {
+            position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
+            width: 42px; height: 42px; background: rgba(16, 185, 129, 0.9); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: #fff; box-shadow: 0 0 12px var(--zapia-glow);
+        }
+        .time-badge { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; z-index: 2; }
+
+        /* CANDADO BLOQUEO */
+        .lock-overlay-full {
+            position: absolute; inset: 0; background: rgba(15, 3, 5, 0.88); backdrop-filter: blur(5px);
+            z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 10px; border: 1px solid var(--red-primary); border-radius: 14px;
+        }
+
+        /* TARJETA 7 (+) */
+        .more-card {
+            width: 120px; height: 330px; background: rgba(255,255,255,0.02); border: 2px dashed var(--border-color);
+            border-radius: 14px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: var(--text-muted); cursor: pointer; transition: 0.3s;
+        }
+        .more-card:hover { border-color: var(--zapia-green); color: var(--zapia-green); }
+
+        /* SECCIÓN 2: AYUDA DIRECTA Y AGENDADOR */
+        .section-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 18px; margin: 28px 0; }
+        .btn-whatsapp {
+            background: #25D366; color: #fff; border: none; padding: 12px 18px; border-radius: 10px;
+            font-weight: 800; cursor: pointer; width: 100%; display: inline-flex; align-items: center; justify-content: center;
+            gap: 8px; text-decoration: none; font-size: 0.9rem; box-shadow: 0 0 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .schedule-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; margin-top: 14px; display: none; }
+        .schedule-box.active { display: block; }
+        .schedule-inputs { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+        .schedule-inputs input, .schedule-inputs select {
+            background: #000; border: 1px solid var(--border-color); color: #fff; padding: 7px 10px; border-radius: 6px; font-size: 0.8rem; outline: none; flex: 1; min-width: 120px;
+        }
+
+        .features-slider { display: flex; gap: 8px; overflow-x: auto; margin-top: 14px; padding-bottom: 6px; }
+        .features-slider::-webkit-scrollbar { display: none; }
+        .feature-chip {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 8px 12px;
+            border-radius: 8px; flex-shrink: 0; font-size: 0.78rem; display: flex; align-items: center; gap: 6px; color: var(--text-main);
+        }
+
+        /* SECCIÓN 3: ECOSISTEMA RED SAPIEN */
+        .fases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+        .fase-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; }
+        .fase-num { font-family: var(--font-mono); color: var(--red-primary); font-size: 1rem; font-weight: 800; }
+
+        /* BANNER FINAL */
+        .banner-redsapien {
+            background: linear-gradient(135deg, rgba(229,9,20,0.15) 0%, rgba(16,185,129,0.06) 100%);
+            border: 1px solid var(--red-primary); border-radius: 16px; padding: 20px; text-align: center; margin: 28px 0;
+        }
+        .btn-redsapien {
+            background: var(--red-primary); color: #fff; text-decoration: none; padding: 12px 22px;
+            border-radius: 8px; font-weight: 800; display: inline-block; margin-top: 12px; font-size: 0.9rem;
+        }
+
+        /* SOBRE CRISTIAN */
+        .author-box { display: flex; flex-direction: column; align-items: center; text-align: center; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin: 28px 0; }
+        .author-img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; border: 2px solid var(--zapia-green); margin-bottom: 10px; }
+
+        /* AGRADECIMIENTOS */
+        .credits-triangle { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 28px 0 16px; }
+        .credit-top { font-weight: 800; color: #fff; font-size: 0.9rem; }
+        .credits-base { display: flex; justify-content: center; gap: 16px; color: var(--text-muted); font-size: 0.78rem; }
+
+        /* MODAL FULLSCREEN */
+        .modal-fullscreen {
+            position: fixed; inset: 0; background: #000; z-index: 10000;
+            display: flex; flex-direction: column; justify-content: space-between; padding: 14px; opacity: 0; pointer-events: none; transition: 0.3s ease;
+        }
+        .modal-fullscreen.active { opacity: 1; pointer-events: auto; }
+        .modal-nav-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6);
+            border: 1px solid var(--border-color); color: #fff; width: 38px; height: 38px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; font-size: 1rem;
+        }
+        .arrow-left { left: 6px; }
+        .arrow-right { right: 6px; }
+        .autoplay-timer { font-family: var(--font-mono); font-size: 0.7rem; color: var(--zapia-green); text-align: center; margin-top: 4px; display: none; }
+    </style>
+
+<style id="iaopen-responsive-player-v3">
+  .carousel-container { gap:12px; padding:4px 2px 18px; scroll-padding-inline:14px; }
+  .video-card { width:clamp(168px, 43vw, 210px); height:clamp(300px, 82vw, 374px); isolation:isolate; }
+  .video-card[role="button"]:focus-visible { outline:2px solid var(--zapia-green); outline-offset:3px; }
+  .video-card.is-locked { cursor:not-allowed; }
+  .card-poster { position:absolute; inset:0; z-index:0; width:100%; height:100%; object-fit:cover; object-position:center; }
+  .video-card .card-overlay { z-index:1; }
+  .video-card > :not(.card-poster):not(.card-overlay) { position:relative; z-index:2; }
+  .video-card .play-btn-center { position:absolute; z-index:2; }
+  .video-card .lock-overlay-full { position:absolute; z-index:3; }
+  .modal-fullscreen { background:rgba(0,0,0,.97); padding:calc(12px + env(safe-area-inset-top)) 14px calc(12px + env(safe-area-inset-bottom)); overflow:hidden; }
+  .modal-video-frame { width:min(90vw, 42svh, calc((100svh - 190px) * 9 / 16)); height:auto; aspect-ratio:9/16; max-height:none; flex:0 1 auto; margin-inline:auto; background:#050505; border:1px solid rgba(255,255,255,.12); border-radius:16px; overflow:hidden; box-shadow:0 24px 80px rgba(0,0,0,.55); }
+  .modal-video-frame video { display:block; width:100%; height:100%; object-fit:contain; background:#050505; }
+  .video-status { min-height:1.15em; max-width:min(92vw,440px); color:#fca5a5; font-size:.78rem; line-height:1.35; text-align:center; margin-top:6px; }
+  #vModalTitle { padding-inline:42px; }
+  .modal-nav-arrow { background:rgba(20,20,24,.76); border-color:rgba(255,255,255,.18); backdrop-filter:blur(8px); }
+  @media(min-width:700px) { .modal-fullscreen{padding:18px 24px}.modal-video-frame{width:min(90vw,44svh,calc((100svh - 210px)*9/16));height:auto}.modal-nav-arrow{width:46px;height:46px} }
+  @media(max-width:480px) { main{padding-left:12px;padding-right:12px}.hero-text h1{font-size:clamp(1.35rem,6vw,1.6rem)}.modal-fullscreen{padding-left:10px;padding-right:10px}.modal-video-frame{width:min(90vw,42svh,calc((100svh - 180px)*9/16));height:auto;border-radius:12px}.modal-nav-arrow{width:34px;height:34px;font-size:.85rem}.arrow-left{left:3px}.arrow-right{right:3px}#vModalTitle{padding-inline:36px;font-size:.92rem!important}.btn-whatsapp{min-height:46px} }
+</style>
+
+
+<style id="iaopen-refinement-v4">
+  .scroll-more-cue{display:flex;width:max-content;flex-direction:column;align-items:center;gap:3px;margin:0 auto 18px;padding:4px 12px;color:rgba(255,255,255,.57);font-size:.68rem;text-decoration:none;letter-spacing:.025em;transition:color .2s ease}
+  .scroll-more-cue svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:.72;animation:iaopen-nudge 2.2s ease-in-out infinite}
+  .scroll-more-cue:hover,.scroll-more-cue:focus-visible{color:rgba(255,255,255,.9);outline-color:rgba(255,255,255,.5)}
+  @keyframes iaopen-nudge{0%,100%{transform:translateY(0);opacity:.56}50%{transform:translateY(3px);opacity:.9}}
+  .modal-video-frame{position:relative}
+  .autoplay-timer{position:absolute;left:50%;bottom:58px;z-index:5;display:none;transform:translateX(-50%);width:max-content;max-width:calc(100% - 24px);padding:9px 13px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(3,3,5,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;font:600 .76rem/1.2 var(--font-main);text-align:center;box-shadow:0 6px 24px rgba(0,0,0,.3);pointer-events:none}
+  .autoplay-timer.is-visible{display:block}
+  .ecosystem-section{margin:32px 0 22px}
+  .ecosystem-heading{text-align:center;max-width:680px;margin:0 auto 16px}
+  .ecosystem-kicker{color:var(--zapia-green);font-size:.68rem;font-weight:800;letter-spacing:.12em}
+  .ecosystem-heading h2{font-size:clamp(1.3rem,4vw,1.7rem);font-weight:800;margin:6px 0}
+  .ecosystem-heading p{max-width:540px;margin:auto;color:var(--text-muted);font-size:.88rem;line-height:1.5}
+  .ecosystem-price{max-width:690px;margin:18px auto 0;padding:clamp(18px,4vw,28px);text-align:center;border:1px solid rgba(229,9,20,.5);border-radius:16px;background:linear-gradient(135deg,rgba(229,9,20,.12),rgba(16,185,129,.055));}
+  .ecosystem-price-label{color:rgba(255,255,255,.72);font-size:.68rem;font-weight:800;letter-spacing:.12em}
+  .ecosystem-total{margin:4px 0;font-size:clamp(2rem,8vw,2.8rem);font-weight:900;letter-spacing:-.04em}
+  .ecosystem-total span{font-size:.42em;letter-spacing:0;color:var(--text-muted)}
+  .ecosystem-payment{max-width:560px;margin:0 auto;color:#d1d5db;font-size:.82rem;line-height:1.55}
+  .ecosystem-price .btn-redsapien{min-width:190px}
+  .ecosystem-note{max-width:570px;margin:12px auto 0;color:rgba(255,255,255,.56);font-size:.68rem;line-height:1.45}
+  @media(max-width:600px){.ecosystem-section{margin:26px 0 18px}.fases-grid{grid-template-columns:1fr;gap:9px}.fase-card{padding:14px}.ecosystem-price{border-radius:14px}.autoplay-timer{bottom:54px;padding:8px 11px;font-size:.72rem}}
+  @media(prefers-reduced-motion:reduce){.scroll-more-cue svg{animation:none}.scroll-more-cue{transition:none}}
+</style>
+
+
+<style id="iaopen-clean-download-pip-v5">
+  .store-icons-stack{display:flex;flex-direction:row;align-items:center;gap:8px;flex-shrink:0}
+  .store-icons-stack a{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.07);color:#f3f4f6}
+  .store-icons-stack svg{width:16px;height:16px;fill:currentColor}
+  .hero-text{margin-bottom:14px}
+  .hero-downloads{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:15px auto 0}
+  .store-badge{min-width:150px;display:flex;align-items:center;gap:9px;padding:8px 12px;border:1px solid rgba(255,255,255,.13);border-radius:10px;background:#101014;color:white;text-decoration:none;text-align:left;transition:transform .18s ease,border-color .18s ease,background .18s ease}
+  .store-badge:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.3);background:#17171c}
+  .store-badge svg{width:22px;height:22px;flex:0 0 auto;fill:currentColor}
+  .store-badge span{display:flex;flex-direction:column;gap:1px}
+  .store-badge small{font-size:.59rem;line-height:1;color:#c2c2ca}
+  .store-badge strong{font-size:.83rem;line-height:1.15}
+  .modal-top-actions{display:flex;align-items:center;gap:12px}
+  .pip-button{padding:7px 10px;border:1px solid rgba(255,255,255,.2);border-radius:8px;background:rgba(255,255,255,.06);color:#fff;font-size:.72rem;cursor:pointer}
+  .pip-button:hover{background:rgba(255,255,255,.12)}
+  .modal-install-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:8px;color:#d1d5db;font-size:.72rem}
+  .modal-install-actions[hidden]{display:none}
+  .modal-install-actions a{padding:6px 10px;border-radius:7px;background:#17171c;border:1px solid rgba(255,255,255,.15);color:#fff;text-decoration:none;font-weight:700}
+  .modal-install-actions a:hover{border-color:rgba(255,255,255,.35)}
+  .section-box{padding:16px;margin:22px 0}
+  .ecosystem-section{margin:24px 0 18px}
+  .banner-redsapien{padding:16px;margin:20px 0}
+  .author-box{padding:16px;margin:20px 0}
+  .author-mark{width:54px;height:54px;display:grid;place-items:center;margin-bottom:10px;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:linear-gradient(145deg,rgba(229,9,20,.35),rgba(16,185,129,.2));font-weight:800;letter-spacing:.04em;color:#fff}
+  .credits-triangle{margin:18px 0 12px}
+  @media(max-width:480px){.store-badge{min-width:142px;padding:8px 10px}.hero-downloads{gap:7px}.modal-install-actions{gap:6px}}
+  @media(prefers-reduced-motion:reduce){.store-badge{transition:none}}
+</style>
+
+
+<style id="iaopen-compact-corrected-offer-v6">
+  main{max-width:900px;padding-top:68px;padding-left:12px;padding-right:12px}
+  .hero-text{margin-bottom:10px}
+  .hero-text h1{font-size:clamp(1.28rem,4.8vw,1.45rem);margin-bottom:3px}
+  .hero-text p{font-size:.76rem;line-height:1.32}
+  .hero-downloads{gap:7px;margin-top:10px}
+  .store-badge{min-width:134px;padding:6px 9px;gap:7px;border-radius:8px}
+  .store-badge svg{width:19px;height:19px}
+  .store-badge strong{font-size:.76rem}
+  .store-badge small{font-size:.55rem}
+  .carousel-container{padding-bottom:12px;gap:9px}
+  .scroll-more-cue{margin-bottom:12px;padding:3px 9px;font-size:.62rem}
+  .scroll-more-cue svg{width:16px;height:16px}
+  .section-box{padding:13px;margin:17px 0;border-radius:13px}
+  .ecosystem-section{margin:20px 0 14px}
+  .ecosystem-heading{margin-bottom:10px}
+  .ecosystem-heading h2{font-size:clamp(1.13rem,3.8vw,1.45rem);line-height:1.2;margin:0 auto 5px;max-width:650px}
+  .ecosystem-heading p{font-size:.76rem;line-height:1.35}
+  .fases-grid{gap:8px;margin:10px 0}
+  .fase-card{padding:11px;border-radius:10px}
+  .fase-card h3{font-size:.78rem!important;line-height:1.2}
+  .fase-num{font-size:.82rem}
+  .ecosystem-price{margin:11px auto 0;padding:14px 16px;border-radius:13px}
+  .ecosystem-total{font-size:clamp(1.7rem,6vw,2.2rem);margin:0}
+  .ecosystem-payment{font-size:.73rem;line-height:1.35}
+  .ecosystem-price .btn-redsapien{margin-top:8px;padding:9px 17px;font-size:.78rem;min-width:0}
+  .author-box{margin:16px 0;padding:14px;border-radius:13px}
+  .author-photo-placeholder{width:81px;height:81px;display:grid;place-items:center;margin-bottom:8px;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:linear-gradient(145deg,rgba(229,9,20,.22),rgba(16,185,129,.12));color:rgba(255,255,255,.72);overflow:hidden}
+  .author-photo-placeholder svg{width:44px;height:44px;fill:none;stroke:currentColor;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round}
+  .author-bio{max-width:440px;margin-top:5px;color:var(--text-muted);font-size:.76rem;line-height:1.4}
+  .typewriter-text{max-width:225px;font-size:clamp(.58rem,1.8vw,.68rem);line-height:1.15;white-space:normal}
+  .store-icons-stack{gap:6px}
+  .store-icons-stack a{width:24px;height:24px}
+  .store-icons-stack svg{width:14px;height:14px}
+  .credits-triangle{display:none}
+  @media(max-width:600px){.fases-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.fase-card{padding:9px 7px}.fase-card h3{font-size:.7rem!important}.ecosystem-price{padding:13px}.author-photo-placeholder{width:81px;height:81px}}
+  @media(max-width:360px){.hero-downloads{gap:5px}.store-badge{min-width:126px;padding:6px 7px}.fase-card h3{font-size:.66rem!important}}
+</style>
+
+
+<style id="iaopen-audit-robust-v7">
+  :root{--page-gutter:clamp(12px,3vw,22px)}
+  html{scroll-behavior:smooth;scroll-padding-top:76px}
+  body{min-width:320px;min-height:100svh;text-rendering:optimizeLegibility}
+  body.loading{overflow:hidden}
+  header{height:62px;padding-inline:var(--page-gutter)}
+  .nav-brand-area{min-width:0;width:calc(100% - 48px);max-width:none;gap:8px}
+  .hamburger{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;border-radius:10px}
+  .hamburger:focus-visible,.store-icons-stack a:focus-visible,.store-badge:focus-visible,.btn-whatsapp:focus-visible,.btn-redsapien:focus-visible{outline:2px solid var(--zapia-green);outline-offset:2px}
+  .typewriter-text{flex:1;min-width:0;max-width:230px;overflow-wrap:anywhere}
+  .store-icons-stack{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:5px;flex:0 0 auto}
+  .store-icons-stack a{width:24px;height:24px;display:grid;place-items:center;border-radius:7px}
+  .store-icons-stack svg{display:block;width:14px;height:14px}
+  main{width:min(100%,900px);padding-top:76px;padding-inline:var(--page-gutter)}
+  .hero-downloads{gap:6px;align-items:center;justify-content:center}
+  /* Visually 30% smaller badges; preserve 44px touch target for accessibility. */
+  .store-badge{position:relative;width:96px;min-width:96px;min-height:44px;height:44px;padding:4px 6px;gap:5px;border:0;background:transparent;justify-content:center;transform:none!important}
+  .store-badge::before{content:"";position:absolute;inset:6px 0;border:1px solid rgba(255,255,255,.13);border-radius:7px;background:#101014;transition:background .18s ease,border-color .18s ease}
+  .store-badge:hover::before{background:#17171c;border-color:rgba(255,255,255,.3)}
+  .store-badge svg,.store-badge span{position:relative;z-index:1}
+  .store-badge svg{width:15px;height:15px}
+  .store-badge small{font-size:.48rem;line-height:1}
+  .store-badge strong{font-size:.62rem;line-height:1.05;white-space:nowrap}
+  .video-card{aspect-ratio:9/16;width:clamp(154px,42vw,210px);height:auto;min-height:0}
+  .card-poster{aspect-ratio:9/16;object-fit:cover;object-position:center}
+  .carousel-container{overscroll-behavior-x:contain;scrollbar-width:none;scroll-padding-inline:var(--page-gutter);padding-inline:2px}
+  .carousel-container::-webkit-scrollbar{display:none}
+  .modal-fullscreen{z-index:11000}
+  .modal-video-frame{aspect-ratio:9/16;width:min(90vw,42svh,calc((100svh - 190px)*9/16));height:auto;max-height:calc(100svh - 190px);}
+  .modal-video-frame video{aspect-ratio:9/16}
+  .modal-nav-arrow:focus-visible,.pip-button:focus-visible{outline:2px solid var(--zapia-green);outline-offset:3px}
+  .mini-player[hidden]{display:none!important}
+  .mini-player{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));z-index:12000;width:min(210px,58vw);overflow:hidden;border:1px solid rgba(255,255,255,.2);border-radius:14px;background:rgba(8,8,12,.96);box-shadow:0 14px 48px rgba(0,0,0,.6);backdrop-filter:blur(14px)}
+  .mini-player.is-active{display:block}
+  .mini-player-bar{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:7px 8px;color:#fff;font-size:.66rem}
+  .mini-player-bar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .mini-player-actions{display:flex;gap:4px;flex:0 0 auto}
+  .mini-player-actions button{width:27px;height:27px;border:1px solid rgba(255,255,255,.14);border-radius:7px;background:rgba(255,255,255,.07);color:white}
+  .mini-video-mount .modal-video-frame,.mini-video-mount video{display:block;width:100%;height:auto;aspect-ratio:9/16;max-height:none;border:0;border-radius:0;box-shadow:none;object-fit:contain}
+  .mini-video-mount .autoplay-timer{bottom:46px}
+  .mobile-menu a{min-height:46px;display:flex;align-items:center;justify-content:center}
+  .schedule-inputs button{min-height:40px}
+  @media(max-width:360px){.nav-brand-area{gap:5px}.typewriter-text{font-size:.55rem}.store-icons-stack{gap:3px}.hero-downloads{gap:4px}.store-badge{width:92px;min-width:92px}}
+  @media(min-width:700px){.modal-video-frame{width:min(90vw,44svh,calc((100svh - 210px)*9/16));max-height:calc(100svh - 210px)}}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.preloader-glow,.scroll-more-cue svg{animation:none!important}*{scroll-behavior:auto!important;transition-duration:.01ms!important}.store-badge::before{transition:none}}
+</style>
+
+</head>
+<body class="loading">
+
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div class="preloader-glow"></div>
+        <svg class="logo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.987 8.987 0 013.361-6.867 8.21 8.21 0 003 2.481z" />
+        </svg>
+    </div>
+
+    <!-- BANNER SCROLL -->
+    <a href="https://redsapien.com" target="_blank" id="scroll-banner">
+        🚀 conozca nuestros servicios <span class="banner-btn-link">clic ahora</span>
+    </a>
+
+    <!-- HEADER -->
+    <header id="main-header">
+        <div class="nav-brand-area">
+            <div class="store-icons-stack" aria-label="Descargar Zapia">
+                <a href="https://play.google.com/store/apps/details?id=com.brainlogic.zapia" target="_blank" rel="noopener noreferrer" aria-label="Descargar Zapia en Google Play" title="Google Play">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.2 14.9 12 3.6 21.8c-.4.3-1 .1-1-.4V2.6c0-.5.6-.7 1-.4Zm12.4 8.2 3.2-2.8 2.1 1.2c1 .6 1 1.9 0 2.5l-2.1 1.2-3.2-2.1Zm-1.1.9 3.1 2.1-9.1 5.2 6-7.3ZM8.9 3.4l9.1 5.2-3.1 2.1-6-7.3Z"/></svg>
+                </a>
+                <a href="https://apps.apple.com/uy/app/zapia-ai-personal-assistant/id6470821480" target="_blank" rel="noopener noreferrer" aria-label="Descargar Zapia en App Store" title="App Store">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.7 12.7c0-2.2 1.8-3.3 1.9-3.4-1-1.5-2.6-1.7-3.2-1.7-1.3-.1-2.6.8-3.3.8-.7 0-1.8-.8-2.9-.8-1.5 0-2.8.9-3.6 2.2-1.5 2.6-.4 6.4 1.1 8.5.7 1 1.5 2.1 2.6 2 1-.1 1.4-.7 2.7-.7s1.7.7 2.8.7c1.2 0 1.9-1 2.5-2 .8-1.1 1.1-2.2 1.1-2.2s-2.1-.8-2.1-3.4ZM14.5 6.2c.6-.7 1-1.7.9-2.7-.9 0-1.9.6-2.5 1.3-.5.6-1 1.6-.9 2.6 1 .1 1.9-.5 2.5-1.2Z"/></svg>
+                </a>
+            </div>
+            <div id="typewriter" class="typewriter-text"></div>
+        </div>
+        <button class="hamburger" onclick="toggleMenu()">☰</button>
+    </header>
+
+    <!-- MENU MOBILE -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button onclick="toggleMenu()" style="position:absolute; top:18px; right:18px; background:none; border:none; color:#fff; font-size:1.6rem;">✕</button>
+        <a href="https://play.google.com/store/apps/details?id=com.brainlogic.zapia" target="_blank" style="color: var(--zapia-green);">📥 Instalar Zapia Gratis</a>
+        <a href="https://redsapien.com" target="_blank">💼 Su Web por $109.000 (Contraentrega)</a>
+        <a href="https://wa.me/573045625920?text=Hola%20Cristian%20me%20ayudas%20a%20dejar%20zapia%20listo%20y%20ejecutando" target="_blank">💬 Hablar con Cristian</a>
+    </div>
+
+    <main>
+        <!-- SECCIÓN 1 -->
+        <section class="hero-text">
+            <h1>Su Agente de IA Gratis</h1>
+            <p>Siga estos pasos para conectar Zapia con sus herramientas y usarla en su día a día.</p>
+            <div class="hero-downloads" aria-label="Descargar Zapia">
+                <a class="store-badge store-badge-play" href="https://play.google.com/store/apps/details?id=com.brainlogic.zapia" target="_blank" rel="noopener noreferrer" aria-label="Descargar Zapia en Google Play">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.2 14.9 12 3.6 21.8c-.4.3-1 .1-1-.4V2.6c0-.5.6-.7 1-.4Zm12.4 8.2 3.2-2.8 2.1 1.2c1 .6 1 1.9 0 2.5l-2.1 1.2-3.2-2.1Zm-1.1.9 3.1 2.1-9.1 5.2 6-7.3ZM8.9 3.4l9.1 5.2-3.1 2.1-6-7.3Z"/></svg>
+                    <span><small>Descarga en</small><strong>Google Play</strong></span>
+                </a>
+                <a class="store-badge store-badge-apple" href="https://apps.apple.com/uy/app/zapia-ai-personal-assistant/id6470821480" target="_blank" rel="noopener noreferrer" aria-label="Descargar Zapia en App Store">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.7 12.7c0-2.2 1.8-3.3 1.9-3.4-1-1.5-2.6-1.7-3.2-1.7-1.3-.1-2.6.8-3.3.8-.7 0-1.8-.8-2.9-.8-1.5 0-2.8.9-3.6 2.2-1.5 2.6-.4 6.4 1.1 8.5.7 1 1.5 2.1 2.6 2 1-.1 1.4-.7 2.7-.7s1.7.7 2.8.7c1.2 0 1.9-1 2.5-2 .8-1.1 1.1-2.2 1.1-2.2s-2.1-.8-2.1-3.4ZM14.5 6.2c.6-.7 1-1.7.9-2.7-.9 0-1.9.6-2.5 1.3-.5.6-1 1.6-.9 2.6 1 .1 1.9-.5 2.5-1.2Z"/></svg>
+                    <span><small>Descarga en</small><strong>App Store</strong></span>
+                </a>
+            </div>
+        </section>
+
+        <div class="carousel-container">
+            <div class="video-card" role="button" tabindex="0" onclick="openVideoModal(0)" aria-label="Reproducir paso 1: Instalar Zapia">
+                <img class="card-poster" src="Videos/AIopen-Videos/01-Instalar-Zapia.jpg" alt="Portada del paso 1: Instalar Zapia" loading="lazy" onerror="this.hidden=true">
+                <div class="time-badge">02:48</div>
+                <div class="card-overlay"></div>
+                <div class="play-btn-center">▶</div>
+                <div>
+                    <span style="color: var(--zapia-green); font-size: 0.65rem; font-weight: 700;">PASO 01</span>
+                    <h3 style="font-size: 0.85rem; margin-top: 3px;">Instalar Zapia</h3>
+                </div>
+            </div>
+            <div class="video-card" role="button" tabindex="0" onclick="openVideoModal(1)" aria-label="Reproducir paso 2: Conectar WhatsApp">
+                <img class="card-poster" src="Videos/AIopen-Videos/02-Conectar-WhatsApp.jpg" alt="Portada del paso 2: Conectar WhatsApp" loading="lazy" onerror="this.hidden=true">
+                <div class="time-badge">02:35</div>
+                <div class="card-overlay"></div>
+                <div class="play-btn-center">▶</div>
+                <div>
+                    <span style="color: var(--zapia-green); font-size: 0.65rem; font-weight: 700;">PASO 02</span>
+                    <h3 style="font-size: 0.85rem; margin-top: 3px;">Conectar WhatsApp</h3>
+                </div>
+            </div>
+            <div class="video-card" role="button" tabindex="0" onclick="openVideoModal(2)" aria-label="Reproducir paso 3: Conectar Gmail">
+                <img class="card-poster" src="Videos/AIopen-Videos/03-Conectar-Gmail.jpg" alt="Portada del paso 3: Conectar Gmail" loading="lazy" onerror="this.hidden=true">
+                <div class="time-badge">01:49</div>
+                <div class="card-overlay"></div>
+                <div class="play-btn-center">▶</div>
+                <div>
+                    <span style="color: var(--zapia-green); font-size: 0.65rem; font-weight: 700;">PASO 03</span>
+                    <h3 style="font-size: 0.85rem; margin-top: 3px;">Conectar Gmail</h3>
+                </div>
+            </div>
+            <div class="video-card" role="button" tabindex="0" onclick="openVideoModal(3)" aria-label="Reproducir paso 4: Conectar Calendar">
+                <img class="card-poster" src="Videos/AIopen-Videos/04-Conectar-Calendar.jpg" alt="Portada del paso 4: Conectar Calendar" loading="lazy" onerror="this.hidden=true">
+                <div class="time-badge">03:33</div>
+                <div class="card-overlay"></div>
+                <div class="play-btn-center">▶</div>
+                <div>
+                    <span style="color: var(--zapia-green); font-size: 0.65rem; font-weight: 700;">PASO 04</span>
+                    <h3 style="font-size: 0.85rem; margin-top: 3px;">Conectar Calendar</h3>
+                </div>
+            </div>
+            <div class="video-card" role="button" tabindex="0" onclick="openVideoModal(4)" aria-label="Reproducir paso 5: Conectar Drive">
+                <img class="card-poster" src="Videos/AIopen-Videos/05-Conectar-Drive.jpg" alt="Portada del paso 5: Conectar Drive" loading="lazy" onerror="this.hidden=true">
+                <div class="time-badge">02:59</div>
+                <div class="card-overlay"></div>
+                <div class="play-btn-center">▶</div>
+                <div class="card-label">
+                    <span>PASO 05</span>
+                    <h3>Conectar Drive</h3>
+                </div>
+            </div>
+            <div class="video-card is-locked" aria-disabled="true" aria-label="Contenido avanzado bloqueado: conectar a Web">
+                <div class="lock-overlay-full">
+                    <span style="font-size: 1.5rem; margin-bottom: 4px;">🔒</span>
+                    <span style="font-size: 0.72rem; font-weight: 800; color: #fff;">WEB PRO</span>
+                    <span style="font-size: 0.62rem; color: var(--text-muted);">$109.000 COP</span>
+                </div>
+                <div>
+                    <span style="color: var(--red-primary); font-size: 0.65rem; font-weight: 700;">AVANZADO</span>
+                    <h3 style="font-size: 0.85rem; margin-top: 3px;">Conectar a Web</h3>
+                </div>
+            </div>
+            <div class="video-card is-locked" aria-disabled="true" aria-label="Contenido avanzado bloqueado: conectar a Meta">
+                <div class="lock-overlay-full">
+                    <span style="font-size: 1.5rem; margin-bottom: 4px;">🔒</span>
+                    <span style="font-size: 0.72rem; font-weight: 800; color: #fff;">META IA</span>
+                    <span style="font-size: 0.62rem; color: var(--text-muted);">Automatizado</span>
+                </div>
+                <div>
+                    <span style="color: var(--red-primary); font-size: 0.65rem; font-weight: 700;">AVANZADO</span>
+                    <h3 style="font-size: 0.85rem; margin-top: 3px;">Conectar a Meta</h3>
+                </div>
+            </div>
+</div>
+        <a class="scroll-more-cue" href="#help-section" aria-label="Bajar al siguiente contenido">
+            <span>Más contenido</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v13m-6-6 6 6 6-6"/></svg>
+        </a>
+
+        <!-- SECCIÓN 2 -->
+        <section class="section-box" id="help-section">
+            <h2 style="font-size: 1.15rem; margin-bottom: 4px;">¿Prefiere que le ayude gratis?</h2>
+            <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 14px;">Escríbame o agende su espacio en 15 minutos.</p>
+
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <a href="https://wa.me/573045625920?text=Hola%20Cristian%20me%20ayudas%20a%20dejar%20zapia%20listo%20y%20ejecutando" target="_blank" class="btn-whatsapp" style="flex: 2; min-width: 200px;">
+                    💬 Ayuda Gratis (15 min)
+                </a>
+                <button onclick="toggleSchedule()" class="btn-whatsapp" style="flex: 1; min-width: 130px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); box-shadow: none;">
+                    📅 Agendar
+                </button>
+            </div>
+
+            <div id="scheduleBox" class="schedule-box">
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--zapia-green);">SELECCIONE FECHA Y HORA:</span>
+                <div class="schedule-inputs">
+                    <input type="date" id="schedDate">
+                    <select id="schedTime">
+                        <option value="09:00 AM">09:00 AM</option>
+                        <option value="11:00 AM">11:00 AM</option>
+                        <option value="02:00 PM">02:00 PM</option>
+                        <option value="04:00 PM">04:00 PM</option>
+                    </select>
+                    <button onclick="confirmSchedule()" class="btn-whatsapp" style="padding: 6px 12px; font-size: 0.8rem; width: auto;">Listo</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ECOSISTEMA RED SAPIEN + ZAPIA -->
+        <section class="ecosystem-section" id="ecosistema">
+            <div class="ecosystem-heading">
+                <h2>¿Desea escalar aún más?</h2>
+                <p>Desarrollamos su ecosistema de ventas y lo conectamos con su agente de IA.</p>
+            </div>
+            <div class="fases-grid">
+                <article class="fase-card"><span class="fase-num">01</span><h3>Sitio web</h3></article>
+                <article class="fase-card"><span class="fase-num">02</span><h3>Publicidad en Meta</h3></article>
+                <article class="fase-card"><span class="fase-num">03</span><h3>Posicionamiento en Google</h3></article>
+            </div>
+            <div class="ecosystem-price">
+                <p class="ecosystem-total">$327.000 <span>COP</span></p>
+                <p class="ecosystem-payment">Tres pagos contra entrega de $109.000 COP. Hosting y dominio incluidos; pauta de Meta aparte.</p>
+                <a href="https://redsapien.com" target="_blank" rel="noopener noreferrer" class="btn-redsapien">Ver Red Sapien</a>
+            </div>
+        </section>
+
+        <!-- SOBRE CRISTIAN -->
+        <section class="author-box">
+            <div class="author-photo-placeholder" role="img" aria-label="Espacio reservado para la foto de Cristian">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c.7-4.2 3.4-6.3 8-6.3s7.3 2.1 8 6.3"/></svg>
+            </div>
+            <h3 style="font-size: 1.05rem; font-weight: 800;">Soy Cristian</h3>
+            <p class="author-bio">Desarrollo ecosistemas digitales de ventas conectados con agentes de IA. Me apasiona acercar tecnología de nivel mundial a más negocios.</p>
+        </section>
+    </main>
+
+    <!-- MODAL -->
+    <div class="modal-fullscreen" id="videoModal">
+        <button class="modal-nav-arrow arrow-left" onclick="prevVideo()">❮</button>
+        <button class="modal-nav-arrow arrow-right" onclick="nextVideo()">❯</button>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; z-index: 10;">
+            <span style="font-weight: 800; font-size: 0.8rem; color: var(--zapia-green);">ZAPIA PLAYER</span>
+            <div class="modal-top-actions">
+                <button id="pipButton" class="pip-button" type="button" onclick="togglePictureInPicture()" hidden>▣ Minimizar</button>
+                <button onclick="closeVideoModal()" aria-label="Cerrar video" style="background:none; border:none; color:#fff; font-size: 1.6rem; cursor:pointer;">✕</button>
+            </div>
+        </div>
+
+        <div style="flex-grow: 1; display:flex; flex-direction:column; justify-content:center; align-items:center; position:relative;">
+            <div class="modal-video-frame" id="modalVideoFrame">
+                <video id="mainVideo" controls playsinline webkit-playsinline preload="metadata"></video>
+                <div id="autoplayTimer" class="autoplay-timer" role="status" aria-live="polite">Siguiente video en 6 s</div>
+            </div>
+            <p id="videoStatus" class="video-status" role="status" aria-live="polite"></p>
+            <div id="installActions" class="modal-install-actions" hidden>
+                <span>Descargue Zapia:</span>
+                <a href="https://play.google.com/store/apps/details?id=com.brainlogic.zapia" target="_blank" rel="noopener noreferrer">Google Play</a>
+                <a href="https://apps.apple.com/uy/app/zapia-ai-personal-assistant/id6470821480" target="_blank" rel="noopener noreferrer">App Store</a>
+            </div>
+            <h3 id="vModalTitle" style="font-size: 1rem; margin-top: 8px; text-align:center;"></h3>
+            <p id="vModalDesc" style="color: var(--text-muted); font-size: 0.75rem; text-align:center; margin-top: 2px; max-width: 90%;"></p>
+        </div>
+
+        <div style="z-index: 10;">
+            <a href="https://wa.me/573045625920?text=Hola%20Cristian%20me%20ayudas%20a%20dejar%20zapia%20listo%20y%20ejecutando" target="_blank" class="btn-whatsapp">
+                💬 Ayuda Inmediata (15 min)
+            </a>
+        </div>
+    </div>
+
+    <aside id="miniPlayer" class="mini-player" aria-label="Video minimizado" hidden>
+        <div class="mini-player-bar">
+            <span id="miniPlayerTitle">Tutorial de Zapia</span>
+            <div class="mini-player-actions">
+                <button type="button" onclick="restoreMiniPlayer()" aria-label="Ampliar video">↗</button>
+                <button type="button" onclick="closeMiniPlayer()" aria-label="Cerrar video">✕</button>
+            </div>
+        </div>
+        <div id="miniVideoMount" class="mini-video-mount"></div>
+    </aside>
+
+    <!-- SCRIPTS -->
+    <script>
+        const videoData = [
+            { title: "01. Instalar Zapia", desc: "Instale Zapia y complete los primeros pasos.", src: "Videos/AIopen-Videos/01-Instalar-Zapia.mp4", poster: "Videos/AIopen-Videos/01-Instalar-Zapia.jpg" },
+            { title: "02. Conectar WhatsApp", desc: "Conecte WhatsApp a su espacio de trabajo.", src: "Videos/AIopen-Videos/02-Conectar-WhatsApp.mp4", poster: "Videos/AIopen-Videos/02-Conectar-WhatsApp.jpg" },
+            { title: "03. Conectar Gmail", desc: "Conecte Gmail para trabajar desde Zapia.", src: "Videos/AIopen-Videos/03-Conectar-Gmail.mp4", poster: "Videos/AIopen-Videos/03-Conectar-Gmail.jpg" },
+            { title: "04. Conectar Calendar", desc: "Conecte Calendar y organice sus actividades.", src: "Videos/AIopen-Videos/04-Conectar-Calendar.mp4", poster: "Videos/AIopen-Videos/04-Conectar-Calendar.jpg" },
+            { title: "05. Conectar Drive", desc: "Conecte Google Drive a su espacio de trabajo.", src: "Videos/AIopen-Videos/05-Conectar-Drive.mp4", poster: "Videos/AIopen-Videos/05-Conectar-Drive.jpg" }
+        ];
+
+        let currentVideoIdx = 0;
+        let timerInterval;
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('preloader').style.display = 'none';
+                    document.body.classList.remove('loading');
+                }, 400);
+            }, 400);
+        });
+
+        // Typewriter mejorado en dos líneas si es necesario
+        const text = "Más de 1 millón de descargas · 100 % gratis y sin trucos";
+        let i = 0;
+        function typeWriter() {
+            if (i < text.length) {
+                document.getElementById("typewriter").textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 35);
+            }
+        }
+        setTimeout(typeWriter, 600);
+
+        window.addEventListener('scroll', () => {
+            const banner = document.getElementById('scroll-banner');
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 60) {
+                banner.classList.add('show');
+                header.classList.add('shifted');
+            } else {
+                banner.classList.remove('show');
+                header.classList.remove('shifted');
+            }
+        });
+
+        function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('active'); }
+        function toggleSchedule() { document.getElementById('scheduleBox').classList.toggle('active'); }
+
+        function confirmSchedule() {
+            const date = document.getElementById('schedDate').value;
+            const time = document.getElementById('schedTime').value;
+            if(!date) { alert('Seleccione una fecha.'); return; }
+            window.open(`https://wa.me/573045625920?text=${encodeURIComponent(`Hola Cristian, agendé llamada para el ${date} a las ${time}.`)}`, '_blank');
+        }
+
+        function openVideoModal(idx) {
+            if (idx < 0 || idx >= videoData.length) return;
+            if (document.getElementById('miniPlayer').classList.contains('is-active')) restoreMiniPlayer();
+            currentVideoIdx = idx;
+            document.getElementById('videoModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            loadVideo(currentVideoIdx);
+        }
+
+        function closeVideoModal() {
+            const video = document.getElementById('mainVideo');
+            const inPip = document.pictureInPictureElement === video || video.webkitPresentationMode === 'picture-in-picture';
+            if (inPip) {
+                document.getElementById('videoModal').classList.remove('active');
+                document.body.style.overflow = '';
+                return;
+            }
+            if (document.getElementById('miniPlayer').classList.contains('is-active')) {
+                closeMiniPlayer();
+                return;
+            }
+            video.pause();
+            video.removeAttribute('src');
+            video.load();
+            clearInterval(timerInterval);
+            document.getElementById('videoModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function syncPipButton() {
+            const button = document.getElementById('pipButton');
+            button.hidden = false;
+            button.setAttribute('aria-label', 'Minimizar video');
+        }
+
+        async function togglePictureInPicture() {
+            const video = document.getElementById('mainVideo');
+            const status = document.getElementById('videoStatus');
+            try {
+                if (document.pictureInPictureElement === video) {
+                    await document.exitPictureInPicture();
+                    return;
+                }
+                if (video.webkitPresentationMode === 'picture-in-picture' && video.webkitSetPresentationMode) {
+                    video.webkitSetPresentationMode('inline');
+                    return;
+                }
+                if (document.pictureInPictureEnabled && video.requestPictureInPicture) {
+                    await video.requestPictureInPicture();
+                    return;
+                }
+                if (video.webkitSetPresentationMode) {
+                    video.webkitSetPresentationMode('picture-in-picture');
+                    return;
+                }
+                // In-page fallback: keep the SAME video element and playback/audio alive in a floating mini-player.
+                const mount = document.getElementById('miniVideoMount');
+                const mini = document.getElementById('miniPlayer');
+                document.getElementById('miniPlayerTitle').textContent = document.getElementById('vModalTitle').textContent;
+                mount.appendChild(video);
+                mini.hidden = false;
+                mini.classList.add('is-active');
+                document.getElementById('videoModal').classList.remove('active');
+                document.body.style.overflow = '';
+                document.getElementById('pipButton').hidden = true;
+            } catch (error) {
+                status.textContent = 'No se pudo minimizar en modo flotante. El video seguirá disponible en esta ventana.';
+            }
+        }
+
+        function restoreMiniPlayer() {
+            const video = document.getElementById('mainVideo');
+            const frame = document.getElementById('modalVideoFrame');
+            frame.insertBefore(video, frame.firstChild);
+            document.getElementById('miniPlayer').classList.remove('is-active');
+            document.getElementById('miniPlayer').hidden = true;
+            document.getElementById('videoModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('pipButton').hidden = false;
+        }
+
+        function closeMiniPlayer() {
+            const video = document.getElementById('mainVideo');
+            const frame = document.getElementById('modalVideoFrame');
+            if (video.parentElement !== frame) frame.insertBefore(video, frame.firstChild);
+            video.pause();
+            video.removeAttribute('src');
+            video.load();
+            document.getElementById('miniPlayer').classList.remove('is-active');
+            document.getElementById('miniPlayer').hidden = true;
+            clearInterval(timerInterval);
+        }
+
+        const mainVideoEl = document.getElementById('mainVideo');
+        mainVideoEl.addEventListener('leavepictureinpicture', () => {
+            const modal = document.getElementById('videoModal');
+            if (!modal.classList.contains('active') && !document.getElementById('miniPlayer').classList.contains('is-active')) {
+                closeVideoModal();
+            }
+        });
+        mainVideoEl.addEventListener('webkitpresentationmodechanged', () => {
+            if (mainVideoEl.webkitPresentationMode === 'inline' && !document.getElementById('videoModal').classList.contains('active')) {
+                closeVideoModal();
+            }
+        });
+
+        function loadVideo(idx) {
+            clearInterval(timerInterval);
+            document.getElementById('autoplayTimer').classList.remove('is-visible');
+            if (idx < 0 || idx >= videoData.length) return;
+            const data = videoData[idx];
+            const video = document.getElementById('mainVideo');
+            const status = document.getElementById('videoStatus');
+            status.textContent = '';
+            video.pause();
+            video.removeAttribute('src');
+            video.poster = data.poster;
+            video.load();
+            document.getElementById('vModalTitle').textContent = data.title;
+            document.getElementById('vModalDesc').textContent = data.desc;
+            document.getElementById('installActions').hidden = idx !== 0;
+            syncPipButton();
+            video.src = data.src;
+            video.load();
+            video.muted = false;
+            video.volume = 1;
+            const playAttempt = video.play();
+            if (playAttempt && typeof playAttempt.catch === 'function') playAttempt.catch(() => { status.textContent = 'Toque reproducir para iniciar el video con sonido.'; });
+            video.onerror = () => { status.textContent = 'No se pudo cargar este video. Revise la conexión e inténtelo de nuevo.'; };
+            video.onplaying = () => { status.textContent = ''; };
+            video.onplay = () => { document.getElementById('autoplayTimer').classList.remove('is-visible'); };
+
+            video.onended = () => {
+                if (currentVideoIdx >= videoData.length - 1) return;
+                let seconds = 6;
+                const timerEl = document.getElementById('autoplayTimer');
+                timerEl.classList.add('is-visible');
+                timerEl.textContent = `Siguiente video en ${seconds} s`;
+                timerInterval = setInterval(() => {
+                    seconds--;
+                    timerEl.textContent = `Siguiente video en ${seconds} s`;
+                    if (seconds <= 0) {
+                        clearInterval(timerInterval);
+                        nextVideo();
+                    }
+                }, 1000);
+            };
+        }
+
+        function prevVideo() { if (currentVideoIdx > 0) { currentVideoIdx--; loadVideo(currentVideoIdx); } }
+        function nextVideo() { if (currentVideoIdx < videoData.length - 1) { currentVideoIdx++; loadVideo(currentVideoIdx); } }
+        document.addEventListener('keydown', (event) => {
+            const card = event.target.closest && event.target.closest('.video-card[role="button"]');
+            if (card && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); card.click(); return; }
+            if (event.key === 'Escape' && document.getElementById('videoModal').classList.contains('active')) closeVideoModal();
+            if (!document.getElementById('videoModal').classList.contains('active')) return;
+            if (event.key === 'ArrowLeft') prevVideo();
+            if (event.key === 'ArrowRight') nextVideo();
+        });
+    </script>
+</body>
+</html>
