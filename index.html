@@ -661,6 +661,21 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
 .btn-redsapien{min-height:48px;display:inline-flex!important;align-items:center;justify-content:center;line-height:1.2;max-width:100%;text-align:center!important}
 @media(prefers-reduced-motion:reduce){.iaopen-touch-ripple{display:none!important;animation:none!important}}
 </style>
+<style id="iaopen-repair-mobile-0546">
+#main-header.shifted .nav-brand-area{visibility:visible!important;opacity:1!important}
+#typewriter{visibility:visible!important;opacity:1!important;overflow-wrap:normal!important;word-break:normal!important;max-width:min(75vw,315px)!important;font-size:clamp(.70rem,2.7vw,.80rem)!important;line-height:1.25!important}
+.iaopen-touch-ripple{z-index:9000!important;width:190px!important;height:190px!important;background:radial-gradient(circle,rgba(39,194,142,.26) 0%,rgba(206,42,53,.16) 32%,transparent 70%)!important}
+.iaopen-terminal.is-typing .iaopen-terminal-message{animation:iaopen-terminal-type 2.8s steps(40,end) both!important}
+.lesson-nav{display:flex;align-items:center;justify-content:center;gap:14px;margin:8px auto 0;flex:none}
+.lesson-nav-button{display:grid;place-items:center;width:44px;height:44px;min-width:44px;border:1px solid rgba(255,255,255,.16);border-radius:50%;background:rgba(25,27,29,.85);color:#f4f5f5;cursor:pointer}
+.lesson-nav-button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.lesson-nav-button:disabled{opacity:.3;cursor:not-allowed}.lesson-nav-button:focus-visible{outline:2px solid #10b981;outline-offset:3px}.lesson-count{min-width:40px;text-align:center;color:#bfc8c3;font-size:.78rem;font-weight:700}
+.modal-fullscreen{overflow-y:auto!important;overscroll-behavior:contain}.modal-video-frame{width:min(90vw,calc((100svh - 270px)*9/16))!important;max-height:calc(100svh - 270px)!important;min-width:min(180px,55vw);flex-shrink:0}
+.video-step-label{margin-top:8px!important}#vModalDesc{margin-top:3px!important;font-size:.82rem!important}.modal-whatsapp-help{margin-top:8px!important}
+.hero-text,.section-box,.author-box,.ecosystem-price{box-shadow:none!important;border-color:rgba(255,255,255,.055)!important}.video-card{box-shadow:none!important}.hero-text::before,.section-box::before,.ecosystem-section::before,.author-box::before{opacity:.15!important}
+@media(max-width:600px){.modal-fullscreen{padding:calc(56px + env(safe-area-inset-top)) 12px calc(12px + env(safe-area-inset-bottom))!important}.modal-video-frame{width:min(80vw,calc((100svh - 255px)*9/16))!important;max-height:calc(100svh - 255px)!important}.lesson-nav{margin-top:6px}.lesson-nav-button{width:44px;height:44px}.iaopen-terminal-line{line-height:1.6!important}}
+@media(max-height:520px){.modal-video-frame{width:min(55vw,calc((100svh - 195px)*9/16))!important;max-height:calc(100svh - 195px)!important;min-width:120px}.modal-fullscreen{justify-content:flex-start!important}.lesson-nav{margin-top:3px}}
+@media(prefers-reduced-motion:reduce){.iaopen-touch-ripple{display:none!important}.iaopen-terminal.is-typing .iaopen-terminal-message{animation:none!important;clip-path:none!important}}
+</style>
 </head>
 <body class="loading">
 
@@ -874,6 +889,11 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
                 </div>
                 <div id="autoplayTimer" class="autoplay-timer" role="status" aria-live="polite">Siguiente video en 6 s</div>
             </div>
+            <div class="lesson-nav" aria-label="Navegación de tutoriales">
+                <button type="button" id="previousLesson" class="lesson-nav-button" onclick="prevVideo()" aria-label="Tutorial anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+                <span id="lessonCount" class="lesson-count" aria-live="polite">1 / 5</span>
+                <button type="button" id="nextLesson" class="lesson-nav-button" onclick="nextVideo()" aria-label="Siguiente tutorial"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+            </div>
             <p id="videoStatus" class="video-status" role="status" aria-live="polite"></p>
             <h3 id="vModalTitle" class="video-step-label"></h3>
             <p id="vModalDesc" style="color: var(--text-muted); font-size: 0.75rem; text-align:center; margin-top: 2px; max-width: 90%;"></p>
@@ -922,7 +942,7 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
         const IAOPEN_PROGRESS_KEY='iaopen.tutorial.progress.v1';
         let lastProgressSavedAt=0, isSwitchingVideo=false, pendingResumeSeconds=null;
         function readLessonProgress(){try{const x=JSON.parse(localStorage.getItem(IAOPEN_PROGRESS_KEY)||'null');if(!x||!Number.isInteger(x.step)||x.step<0||x.step>=videoData.length||!Number.isFinite(x.seconds)||x.seconds<0||!Number.isFinite(x.savedAt)||x.savedAt>Date.now()+60000||Date.now()-x.savedAt>30*86400000)return null;return x;}catch(e){return null;}}
-        function writeLessonProgress(force=false){if(isSwitchingVideo||!Number.isFinite(mainVideoEl.currentTime)||mainVideoEl.currentTime<1)return;if(!force&&Date.now()-lastProgressSavedAt<5000)return;try{localStorage.setItem(IAOPEN_PROGRESS_KEY,JSON.stringify({step:currentVideoIdx,seconds:Math.floor(mainVideoEl.currentTime),savedAt:Date.now()}));lastProgressSavedAt=Date.now();}catch(e){}}
+        function writeLessonProgress(force=false){if(isSwitchingVideo||mainVideoEl.ended||!Number.isFinite(mainVideoEl.currentTime)||mainVideoEl.currentTime<1)return;if(!force&&Date.now()-lastProgressSavedAt<5000)return;try{localStorage.setItem(IAOPEN_PROGRESS_KEY,JSON.stringify({step:currentVideoIdx,seconds:Math.floor(mainVideoEl.currentTime),savedAt:Date.now()}));lastProgressSavedAt=Date.now();}catch(e){}}
         function clearLessonProgress(){try{localStorage.removeItem(IAOPEN_PROGRESS_KEY)}catch(e){}}
 
         function populateScheduleTimes() {
@@ -1176,6 +1196,9 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
             document.getElementById('autoplayTimer').classList.remove('is-visible');
             if (idx < 0 || idx >= videoData.length) return;
             const data = videoData[idx];
+            const previousButton=document.getElementById('previousLesson'), nextButton=document.getElementById('nextLesson');
+            previousButton.disabled=idx===0;nextButton.disabled=idx===videoData.length-1;
+            document.getElementById('lessonCount').textContent=(idx+1)+' / '+videoData.length;
             resetLessonCheck();
             const video = document.getElementById('mainVideo');
             const status = document.getElementById('videoStatus');
@@ -1246,8 +1269,8 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
             }
         }
 
-        function prevVideo() { if (currentVideoIdx > 0) { currentVideoIdx--; loadVideo(currentVideoIdx); } }
-        function nextVideo() { if (currentVideoIdx < videoData.length - 1) { currentVideoIdx++; loadVideo(currentVideoIdx); } }
+        function prevVideo() { if (currentVideoIdx > 0) { writeLessonProgress(true);pendingResumeSeconds=null;currentVideoIdx--; loadVideo(currentVideoIdx); } }
+        function nextVideo() { if (currentVideoIdx < videoData.length - 1) { writeLessonProgress(true);pendingResumeSeconds=null;currentVideoIdx++; loadVideo(currentVideoIdx); } }
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape' && document.getElementById('mobileMenu').classList.contains('active')) { toggleMenu(); return; }
             const card = event.target.closest && event.target.closest('.video-card[role="button"]');
@@ -1284,6 +1307,8 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
             if(!languageCopy[lang])lang='es'; activeLanguage=lang;
             const index=lang==='en'?0:1; document.documentElement.lang=lang;
             document.getElementById('lang-selector').value=lang;
+            document.getElementById('previousLesson').setAttribute('aria-label',lang==='en'?'Previous tutorial':lang==='pt'?'Tutorial anterior':'Tutorial anterior');
+            document.getElementById('nextLesson').setAttribute('aria-label',lang==='en'?'Next tutorial':lang==='pt'?'Próximo tutorial':'Siguiente tutorial');
             textNodes.forEach(({node,original,key})=>{node.nodeValue=lang==='es'?original:original.replace(key,translations[key][index]);});
             attributeNodes.forEach(({el,attr,original})=>el.setAttribute(attr,lang==='es'?original:attrTranslations[original][index]));
             document.querySelectorAll('[data-i18n]').forEach(el=>{const item=dynamicTranslations[el.dataset.i18n];if(item)el.textContent=item[lang==='es'?0:lang==='en'?1:2];});
@@ -1314,8 +1339,8 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
         const touchRipple=document.getElementById('touchRipple');
         let rippleTimer=0;
         document.addEventListener('pointerdown',event=>{
-            if(!event.isPrimary||event.button!==0||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-            if(event.target.closest('a,button,input,select,textarea,video,[role="button"],.video-card,.modal-fullscreen,.resume-nudge,.mobile-menu,.schedule-box,header'))return;
+            if(event.isPrimary===false||(event.pointerType==='mouse'&&event.button!==0)||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+            if(!(event.target instanceof Element)||event.target.closest('a,button,input,select,textarea,video,[role="button"],.video-card,.modal-fullscreen,.resume-nudge,.mobile-menu,.schedule-box,header'))return;
             if(!event.target.closest('main,body'))return;
             touchRipple.style.left=event.clientX+'px';touchRipple.style.top=event.clientY+'px';
             touchRipple.classList.remove('is-active');void touchRipple.offsetWidth;touchRipple.classList.add('is-active');
