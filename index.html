@@ -465,6 +465,17 @@
  @media(max-width:360px){.typewriter-text{font-size:.7rem}.hero-text{padding-inline:10px}.fase-card{padding:10px 6px}}
  @media(prefers-reduced-motion:reduce){.typewriter-text{animation:none}}
 </style>
+<style id="iaopen-detalles-20261029">
+ .scroll-more-cue{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:8px 14px;line-height:1.25;margin:4px auto 22px}
+ .scroll-more-cue svg{display:block;width:21px;height:21px;flex:0 0 21px;animation:iaopen-nudge 2.2s ease-in-out infinite}
+ #preloader::after{content:"";position:absolute;width:106px;height:106px;border:1px solid rgba(16,185,129,.18);border-top-color:rgba(16,185,129,.8);border-radius:50%;animation:iaopen-preloader-spin 1.4s linear infinite}
+ #preloader .logo-svg{filter:drop-shadow(0 0 16px rgba(229,9,20,.55));transform:scale(1.08)}
+ @keyframes iaopen-preloader-spin{to{transform:rotate(360deg)}}
+ .section-box.iaopen-reveal,.ecosystem-heading.iaopen-reveal,.fase-card.iaopen-reveal,.ecosystem-price.iaopen-reveal,.author-box.iaopen-reveal{animation:iaopen-appear .55s cubic-bezier(.22,.8,.25,1) both}
+ @keyframes iaopen-appear{from{opacity:.65;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+ @media(max-width:360px){.scroll-more-cue{margin-bottom:18px}.ecosystem-price,.section-box,.author-box{max-width:100%;overflow-wrap:anywhere}}
+ @media(prefers-reduced-motion:reduce){#preloader::after,.scroll-more-cue svg{animation:none!important}.section-box.iaopen-reveal,.ecosystem-heading.iaopen-reveal,.fase-card.iaopen-reveal,.ecosystem-price.iaopen-reveal,.author-box.iaopen-reveal{animation:none!important}}
+</style>
 </head>
 <body class="loading">
 
@@ -589,7 +600,7 @@
             </div>
 </div>
         <a class="scroll-more-cue" href="#help-section" aria-label="Bajar al siguiente contenido">
-            <span>Más contenido</span>
+            <span>Aún hay más...</span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v13m-6-6 6 6 6-6"/></svg>
         </a>
 
@@ -656,8 +667,8 @@
             <div class="modal-video-frame" id="modalVideoFrame">
                 <video id="mainVideo" controls playsinline webkit-playsinline preload="metadata"></video>
                 <div id="installOverlay" class="install-overlay" aria-live="polite" hidden>
-                    <span>¿Aún no tiene Zapia?</span>
-                    <a href="https://zapia.com/r/XV6M406K" target="_blank" rel="noopener noreferrer">Descargar Zapia gratis</a>
+                    <span>¿Aún no la descarga?</span>
+                    <a href="https://zapia.com/r/XV6M406K" target="_blank" rel="noopener noreferrer" aria-label="Descargar Zapia con el enlace de referido">Haga clic aquí</a>
                 </div>
                 <div id="autoplayTimer" class="autoplay-timer" role="status" aria-live="polite">Siguiente video en 6 s</div>
             </div>
@@ -857,7 +868,7 @@
         function syncInstallOverlay() {
             const inModal = document.getElementById('videoModal').classList.contains('active');
             const t = mainVideoEl.currentTime;
-            document.getElementById('installOverlay').hidden = !(currentVideoIdx === 0 && inModal && t >= 4 && t < 10);
+            document.getElementById('installOverlay').hidden = !(currentVideoIdx === 0 && inModal && t >= 4 && t < 12);
         }
         mainVideoEl.addEventListener('timeupdate', syncInstallOverlay);
         mainVideoEl.addEventListener('seeked', syncInstallOverlay);
@@ -916,6 +927,17 @@
                     }
                 }, 1000);
             };
+        }
+
+        // Progressive enhancement: content remains visible without JavaScript or IntersectionObserver.
+        if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            const reveals = document.querySelectorAll('.section-box, .ecosystem-heading, .fase-card, .ecosystem-price, .author-box');
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) { entry.target.classList.add('iaopen-reveal'); observer.unobserve(entry.target); }
+                });
+            }, {threshold: 0.12});
+            reveals.forEach(element => revealObserver.observe(element));
         }
 
         function prevVideo() { if (currentVideoIdx > 0) { currentVideoIdx--; loadVideo(currentVideoIdx); } }
