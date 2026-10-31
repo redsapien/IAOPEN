@@ -676,8 +676,18 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
 @media(max-height:520px){.modal-video-frame{width:min(55vw,calc((100svh - 195px)*9/16))!important;max-height:calc(100svh - 195px)!important;min-width:120px}.modal-fullscreen{justify-content:flex-start!important}.lesson-nav{margin-top:3px}}
 @media(prefers-reduced-motion:reduce){.iaopen-touch-ripple{display:none!important}.iaopen-terminal.is-typing .iaopen-terminal-message{animation:none!important;clip-path:none!important}}
 </style>
+<style id="iaopen-funnel-reliability-20261030">
+#videoModal .video-status:not(:empty){position:relative!important;clip:auto!important;clip-path:none!important;overflow:visible!important;width:auto!important;max-width:min(92vw,440px)!important;white-space:normal!important;min-height:1em;margin:6px auto 0;padding:6px 10px;color:#ffd0d0!important;background:rgba(38,15,18,.85);border-radius:8px;text-align:center;font-size:.8rem;line-height:1.35}
+#videoModal .video-status:empty{display:none!important}
+#scroll-banner:focus-visible,.resume-nudge button:focus-visible{outline:2px solid #69e1b1;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){#preloader{transition:none!important}}
+</style>
 </head>
 <body class="loading">
+    <script>
+      (function(){let done=false;function reveal(){if(done)return;done=true;const p=document.getElementById('preloader');if(p){p.style.opacity='0';setTimeout(()=>{p.style.display='none'},400)}document.body.classList.remove('loading')}
+      window.addEventListener('load',()=>setTimeout(reveal,400),{once:true});setTimeout(reveal,3500)})();
+    </script>
 
     <!-- PRELOADER -->
     <div id="preloader">
@@ -688,7 +698,7 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
     </div>
 
     <!-- BANNER SCROLL -->
-    <a href="https://redsapien.com" target="_blank" id="scroll-banner">
+    <a href="https://redsapien.com" target="_blank" rel="noopener noreferrer" id="scroll-banner">
         <span data-i18n="banner">Conozca nuestros servicios</span> <span class="banner-btn-link" data-i18n="bannerCta">clic ahora</span>
     </a>
 
@@ -812,7 +822,7 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
             <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 14px;">Escríbame o agende su espacio en 15 minutos.</p>
 
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <a href="https://wa.me/573045625920?text=Hola%20Cristian%20me%20ayudas%20a%20dejar%20zapia%20listo%20y%20ejecutando" target="_blank" class="btn-whatsapp" style="flex: 2; min-width: 200px;">
+                <a href="https://wa.me/573045625920?text=Hola%20Cristian%20me%20ayudas%20a%20dejar%20zapia%20listo%20y%20ejecutando" target="_blank" rel="noopener noreferrer" class="btn-whatsapp" style="flex: 2; min-width: 200px;">
                     💬 Ayuda Gratis (15 min)
                 </a>
                 <button type="button" id="scheduleToggle" onclick="toggleSchedule()" class="btn-whatsapp schedule-toggle" aria-expanded="false" aria-controls="scheduleBox" style="flex: 1; min-width: 130px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); box-shadow: none;">
@@ -940,9 +950,9 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
         let timerInterval;
         let lastVideoTrigger = null;
         const IAOPEN_PROGRESS_KEY='iaopen.tutorial.progress.v1';
-        let lastProgressSavedAt=0, isSwitchingVideo=false, pendingResumeSeconds=null;
+        let lastProgressSavedAt=0, isSwitchingVideo=false, pendingResumeSeconds=null, activeVideoSource='';
         function readLessonProgress(){try{const x=JSON.parse(localStorage.getItem(IAOPEN_PROGRESS_KEY)||'null');if(!x||!Number.isInteger(x.step)||x.step<0||x.step>=videoData.length||!Number.isFinite(x.seconds)||x.seconds<0||!Number.isFinite(x.savedAt)||x.savedAt>Date.now()+60000||Date.now()-x.savedAt>30*86400000)return null;return x;}catch(e){return null;}}
-        function writeLessonProgress(force=false){if(isSwitchingVideo||mainVideoEl.ended||!Number.isFinite(mainVideoEl.currentTime)||mainVideoEl.currentTime<1)return;if(!force&&Date.now()-lastProgressSavedAt<5000)return;try{localStorage.setItem(IAOPEN_PROGRESS_KEY,JSON.stringify({step:currentVideoIdx,seconds:Math.floor(mainVideoEl.currentTime),savedAt:Date.now()}));lastProgressSavedAt=Date.now();}catch(e){}}
+        function writeLessonProgress(force=false){if(isSwitchingVideo||pendingResumeSeconds!==null||mainVideoEl.ended||!activeVideoSource||mainVideoEl.currentSrc!==activeVideoSource||!Number.isFinite(mainVideoEl.currentTime)||mainVideoEl.currentTime<1)return;if(!force&&Date.now()-lastProgressSavedAt<5000)return;try{localStorage.setItem(IAOPEN_PROGRESS_KEY,JSON.stringify({step:currentVideoIdx,seconds:Math.floor(mainVideoEl.currentTime),savedAt:Date.now()}));lastProgressSavedAt=Date.now();}catch(e){}}
         function clearLessonProgress(){try{localStorage.removeItem(IAOPEN_PROGRESS_KEY)}catch(e){}}
 
         function populateScheduleTimes() {
@@ -963,15 +973,6 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
         }
         populateScheduleTimes();
 
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('preloader').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('preloader').style.display = 'none';
-                    document.body.classList.remove('loading');
-                }, 400);
-            }, 400);
-        });
 
         let typeTimer;
         function startTypewriter() {
@@ -1212,9 +1213,9 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
             document.getElementById('vModalDesc').textContent = lessonText(idx).desc;
             document.getElementById('installOverlay').hidden = true;
             syncPipButton();
+            activeVideoSource=new URL(data.src,document.baseURI).href;
             video.src = data.src;
             video.load();
-            setTimeout(()=>{isSwitchingVideo=false;},120);
             video.muted = false;
             video.volume = 1;
             const playAttempt = video.play();
@@ -1347,11 +1348,19 @@ main{max-width:930px;padding-top:clamp(78px,9vw,96px)}
             clearTimeout(rippleTimer);rippleTimer=setTimeout(()=>touchRipple.classList.remove('is-active'),850);
         },{passive:true});
         const resumeNudge=document.getElementById('resumeNudge');
-        function renderResumePrompt(){let dismissed=false;try{dismissed=sessionStorage.getItem('iaopen.resume.dismissed')==='1'}catch(e){}if(dismissed)return;const item=readLessonProgress();if(!item)return;const words=L();document.getElementById('resumeHeading').textContent=words.resumeTitle;document.getElementById('resumeDescription').textContent=words.resumeText.replace('{step}',String(item.step+1));document.getElementById('resumeNow').textContent=words.resumeYes;document.getElementById('resumeDismiss').textContent=words.resumeNo;resumeNudge.hidden=false;}
+        function renderResumePrompt(){if(document.getElementById('videoModal').classList.contains('active')||document.getElementById('miniPlayer').classList.contains('is-active'))return;let dismissed=false;try{dismissed=sessionStorage.getItem('iaopen.resume.dismissed')==='1'}catch(e){}if(dismissed)return;const item=readLessonProgress();if(!item)return;const words=L();document.getElementById('resumeHeading').textContent=words.resumeTitle;document.getElementById('resumeDescription').textContent=words.resumeText.replace('{step}',String(item.step+1));document.getElementById('resumeNow').textContent=words.resumeYes;document.getElementById('resumeDismiss').textContent=words.resumeNo;resumeNudge.hidden=false;}
         document.getElementById('resumeDismiss').addEventListener('click',()=>{resumeNudge.hidden=true;try{sessionStorage.setItem('iaopen.resume.dismissed','1')}catch(e){}});
         document.getElementById('resumeNow').addEventListener('click',()=>{const item=readLessonProgress();if(!item){resumeNudge.hidden=true;return;}try{sessionStorage.removeItem('iaopen.resume.dismissed')}catch(e){}resumeNudge.hidden=true;pendingResumeSeconds=item.seconds;openVideoModal(item.step);});
-        mainVideoEl.addEventListener('loadedmetadata',()=>{if(pendingResumeSeconds===null||!mainVideoEl.currentSrc)return;const duration=mainVideoEl.duration;if(!Number.isFinite(duration)||duration<=0)return;const target=Math.min(pendingResumeSeconds,Math.max(0,duration-1));try{mainVideoEl.currentTime=target;pendingResumeSeconds=null;}catch(e){document.getElementById('videoStatus').textContent=L().resumeSeekError;pendingResumeSeconds=null;}});
+        mainVideoEl.addEventListener('loadedmetadata',()=>{
+            if(!activeVideoSource||mainVideoEl.currentSrc!==activeVideoSource)return;
+            if(pendingResumeSeconds!==null){const duration=mainVideoEl.duration;
+                if(Number.isFinite(duration)&&duration>0){const target=Math.min(pendingResumeSeconds,Math.max(0,duration-1));
+                    try{mainVideoEl.currentTime=target;pendingResumeSeconds=null;}catch(e){document.getElementById('videoStatus').textContent=L().resumeSeekError;pendingResumeSeconds=null;}}
+            }
+            isSwitchingVideo=false;
+        });
         window.addEventListener('load',()=>setTimeout(renderResumePrompt,900),{once:true});
+        window.addEventListener('pageshow',()=>setTimeout(renderResumePrompt,300));
 
     </script>
 </body>
